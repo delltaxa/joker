@@ -3,6 +3,24 @@
 
 Joker is an reverse shell manager which uses a Webserver to communicate with it's clients.
 
+# Installation
+
+Intalling the script
+```bash
+git clone https://github.com/delltaxa/joker.git
+```
+
+Building the script
+``` bash
+cd joker/
+go build .
+```
+
+Running it
+```
+./joker
+```
+
 
 # Features
 
