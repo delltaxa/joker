@@ -86,18 +86,32 @@ func main() {
 				var selected_session string = parsed_user_input[1]
 				var session_found bool
 
+				var sess joker_config
+				
 				for i:=0;i<len(sessions);i++ {
 					if sessions[i]._Auth == selected_session {
 						session_found = true
+						sess = sessions[i]
 					}
 				}
 
 				if session_found {
 					for {
+						var shrompt string
+
+						switch sess._Os {
+							case("windows"):
+								shrompt = "\n"+sess._Self+">"
+							case("linux"):
+								shrompt = "\n"+sess._Self+"$"
+							default:
+								shrompt = "\n"+"[UNKNOWN]"+"?"
+						}
+
 						var shell_user_input string
 
 						for len(shell_user_input) <= 0 {
-							fmt.Printf("%s", "$ ")
+							fmt.Printf("%s", shrompt+" ")
 							shell_user_input = input()
 						}
 
