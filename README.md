@@ -1,4 +1,4 @@
-# joker v1.0.02
+# joker v1.0.03
 ## Inspired by villain
 
 Joker is an reverse shell manager which uses a Webserver to communicate with it's clients.
@@ -25,6 +25,7 @@ Running it
 
 - Fully Interactive shell
 - Windows Client is now hidden
+- Linux Supported
 
 # Features
 
@@ -33,7 +34,6 @@ Running it
 
 # Comming Soon
 - Obfuscator to make it FUD
-- more supported os because since of now it only has a client for windows
 - cleaner code
 
 # I dont't know how to create a README so that's it lol.
