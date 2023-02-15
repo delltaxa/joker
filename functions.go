@@ -26,7 +26,7 @@ func display_sessions() {
 		if sessions[i]._Active > timenow - 5 {
 			status = Fore["GREEN"]+"Active"+Fore["RESET"]
 		}
-		fmt.Println(sessions[i]._Auth,sessions[i]._Addr+gchar(" ", 15 - len(sessions[i]._Addr)),sessions[i]._Os+gchar(" ", 7 - len(sessions[i]._Os)),sessions[i]._Self,status)
+		fmt.Println(sessions[i]._Auth,sessions[i]._Addr+gchar(" ", 15 - len(sessions[i]._Addr)),sessions[i]._Os+gchar(" ", 7 - len(sessions[i]._Os)),sessions[i]._Self+gchar(" ", longest_username - len(sessions[i]._Self)),status)
 	}
 
 	if len(sessions) == 0 {
