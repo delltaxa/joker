@@ -1,4 +1,4 @@
-# joker v1.0.03
+# joker v1.0.04
 ## Inspired by villain
 
 Joker is an reverse shell manager which uses a Webserver to communicate with it's clients.
