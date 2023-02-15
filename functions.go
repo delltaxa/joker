@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 )
 
@@ -32,4 +33,13 @@ func display_sessions() {
 	if len(sessions) == 0 {
 		fmt.Println("None                 None            None    None",gchar(" ", longest_username - 4)+"None")
 	}
+}
+
+
+func VerifySessionID(sessionID string) bool {
+    pattern := "^[a-f0-9]{6}-[a-f0-9]{6}-[a-f0-9]{6}$"
+
+    regex := regexp.MustCompile(pattern)
+
+    return regex.MatchString(sessionID)
 }
